@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>javascript设计模式</title>
+</head>
+<body>
+<script>
+    //使用了this.instance,压缩了一定的命名量，但是问题不大
+    // var Singleton = function (name) {
+    //     this.name = name;
+    //     this.instance = null;
+    // }
+    // Singleton.prototype.getName = function () {
+    //     alert(this.name)
+    // }
+    // Singleton.getInstance = function (name) {
+    //     if(!this.instance){
+    //         this.instance = new Singleton(name);
+    //     }
+    //     return this.instance
+    // }
+    // var a = Singleton.getInstance('save1');
+    // var b = Singleton.getInstance('save2');
+    // console.log(a)
+    // console.log(b)
+    // console.log(a === b)
+
+
+    //第二种，好处，没有使用this下的某个属性，定义了一个封闭变量，以上两种方法都不够透明，换句话说，必须通过ingleton.getInstance来创建或者获取对象
+    // var Singleton = function (name) {
+    //     this.name = name;
+    // }
+    // Singleton.prototype.getName = function () {
+    //     alert(this.name)
+    // }
+    // Singleton.getInstance = (function () {
+    //     var instance = null;
+    //     return function (name) {
+    //         if(!instance){
+    //             instance = new Singleton(name);
+    //         }
+    //         return instance
+    //     }
+    // })()
+    // var a = Singleton.getInstance('save1');
+    // var b = Singleton.getInstance('save2');
+    // console.log(a)
+    // console.log(b)
+    // console.log(a === b)
+
+
+    //透明的单例
+    //实现了以new一个对象的方式创建对象的单例模式，问题：1.构造函数看起来不像构造函数 2.改变构造函数，让他不在是个单例需要修改构造函数
+    // var CreateDiv = (function () {
+    //     var instance = null;
+    //     function CreateDiv(name) {
+    //         if(instance){
+    //             return instance
+    //         }
+    //         this.name = name;
+    //         this.getName()
+    //         return instance = this
+    //     }
+    //     CreateDiv.prototype.getName = function () {
+    //         alert(this.name)
+    //     }
+    //     return CreateDiv
+    // })()
+    // var a = new CreateDiv('save1');
+    // var b = new CreateDiv('save1');
+    // console.log(a);
+    // console.log(b);
+    // console.log(a === b)
+
+
+//用代理实现单例模式
+    var CreateDiv = function (name) {
+        this.name = name
+        this.getName()
+    }
+    CreateDiv.prototype.getName = function () {
+        alert(this.name)
+    }
+    //代理
+    var proxySingleton = (function () {
+       var instance = null;
+       return  function (name) {
+           if(instance){
+               return instance
+           }
+           return instance = new CreateDiv(name)
+       }
+    })()
+    var a = new proxySingleton('save1');
+    var b = new proxySingleton('save1');
+    console.log(a);
+    console.log(b);
+    console.log(a === b)
+
+    //单例模式在页面的用处，用于某个可能会用到的，弹窗这种的，例如登陆弹窗
+</script>
+</body>
+</html>
